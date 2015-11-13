@@ -68,7 +68,7 @@ public:
 		// mTexture.resize(32, 32);
 		
 		initWindow(Window::Dim(0,0, 600, 400), "Ambisonics Metering", 30);
-//		mStateTaker.start();
+		mStateTaker.start();
 		
 //		light.ambient(Color(0.4, 0.4, 0.4, 1.0));
 //	    light.pos(5, 5, 5);
@@ -101,6 +101,7 @@ public:
 			mTexture.submit(mMeterValues, true);
 			
 			mTexture.filter(Texture::NEAREST);
+			// std::cout << "New State" << std::endl;
 		}
 		
 		g.polygonMode(Graphics::FILL);

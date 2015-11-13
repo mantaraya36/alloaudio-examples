@@ -48,10 +48,11 @@ class AmbiMeterRenderer : public App
 public:
 	
 	AmbiMeterRenderer() :
-	    mMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
-	    mNewRmsMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
-	    mNewPeakMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
-	    mTextureBuffer(((SPATIAL_SAMPLING * SPATIAL_SAMPLING * 3 * 4) + 1 ) * sizeof(float) )
+	    mMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
+	    mNewRmsMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
+	    mNewPeakMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
+	    mTextureBuffer(((SPATIAL_SAMPLING * SPATIAL_SAMPLING * 3 * 4) + 1 ) * sizeof(float) ),
+	    mStateMaker("192.168.10.255")
 	{
 		addSphereWithTexcoords(mMesh, 1, 128);
 		addCube(mFrontalMesh, false, 0.1);
