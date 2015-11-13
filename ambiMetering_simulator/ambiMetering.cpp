@@ -64,10 +64,10 @@ public:
 		
 		SearchPaths sp;
 //		sp.addSearchPath("/home/andres/Documents/src/Allostuff/AlloSystem-github/Ambisonics/Ambisonia/");
-		sp.addSearchPath("./Ambisonics/Ambisonia/");
-		sp.addSearchPath("./Ambisonics/NYC Ambisonics Sampler/");
+		sp.addSearchPath("../Ambisonics/Ambisonia/");
+		sp.addSearchPath("../Ambisonics/NYC Ambisonics Sampler/");
 		
-		string filename = "PWH_Purcell-Passacaglia_(How_Happy).amb";
+		string filename = "AF_Orfeo_Barocco_REC2.amb";
 //		string filename = "NYC AMB Long Island City 01 B-Format.wav";
 //		string filename = "NYC AMB Subway 02 B-Format.wav";
 		

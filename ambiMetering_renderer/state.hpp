@@ -2,7 +2,7 @@
 #define STATE_HPP
 
 
-#define SPATIAL_SAMPLING 7
+#define SPATIAL_SAMPLING 10
 
 struct State {
 	float rmsTexture[SPATIAL_SAMPLING*SPATIAL_SAMPLING*3];

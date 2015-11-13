@@ -64,8 +64,8 @@ public:
 //		nav().pos(0,0,4);
 //		nav().quat().fromAxisAngle(0. * M_2PI, 0, 1, 0);
 		
-		mTexture.create();
-		mTexture.resize(32, 32);
+		// mTexture.create();
+		// mTexture.resize(32, 32);
 		
 		initWindow(Window::Dim(0,0, 600, 400), "Ambisonics Metering", 30);
 //		mStateTaker.start();
@@ -89,8 +89,8 @@ public:
 		omni().uniforms(shader());
 	    omni().clearColor() = Color(0.4);
 		
-		shader().uniform("lighting", 0.5);
-	    shader().uniform("texture", 0.5);
+		shader().uniform("lighting", 0);
+	    shader().uniform("texture", 1);
 		
 		bool newState = false;
 		while (mStateTaker.get(s) > 0) { newState = true;} // Pop all states in queue
