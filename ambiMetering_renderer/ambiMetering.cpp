@@ -2,6 +2,7 @@
 
 #include <allocore/al_Allocore.hpp>
 #include <allocore/types/al_SingleRWRingBuffer.hpp>
+#include <alloutil/al_OmniStereoGraphicsRenderer.hpp>
 #include "Cuttlebone/Cuttlebone.hpp"
 #include "Gamma/scl.h"
 
@@ -44,43 +45,68 @@ public:
 	double mDbRange;
 };
 
-class AmbiMeter : public App
+class AmbiMeterRenderer : public OmniStereoGraphicsRenderer
 {
 public:
 	
-	AmbiMeter() :
-	    mMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
+	AmbiMeterRenderer() :
+	    mMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
 	    mTextureBuffer(((SPATIAL_SAMPLING * SPATIAL_SAMPLING * 3 * 4) + 1 ) * sizeof(float) )
 	{
 		addSphereWithTexcoords(mMesh, 1, 128);
 		addCube(mFrontalMesh, false, 0.1);
 		
-		lens().near(0.1).far(25).fovy(45);
-		nav().pos(0,0,4);
-		nav().quat().fromAxisAngle(0. * M_2PI, 0, 1, 0);
+//		mMesh.vertex(-10,-10,-10); mMesh.color(RGB(1,0,0)); mMesh.texCoord(0, 0);
+//	    mMesh.vertex( 10,-10,-10); mMesh.color(RGB(1,1,0)); mMesh.texCoord(1, 0);
+//	    mMesh.vertex( 0, 10,-10); mMesh.color(RGB(0,1,1)); mMesh.texCoord(0.5, 1);
+		
+//		lens().near(0.1).far(25).fovy(45);
+//		nav().pos(0,0,4);
+//		nav().quat().fromAxisAngle(0. * M_2PI, 0, 1, 0);
+		
+		mTexture.create();
+		mTexture.resize(32, 32);
 		
 		initWindow(Window::Dim(0,0, 600, 400), "Ambisonics Metering", 30);
-		mStateTaker.start();
+//		mStateTaker.start();
+		
+//		light.ambient(Color(0.4, 0.4, 0.4, 1.0));
+//	    light.pos(5, 5, 5);
+		params.mSphere = true;
 	}
 	
-	virtual void onCreate(const ViewpointWindow &win) override {
-
+	virtual void onAnimate(al_sec dt) override {
+		// light.pos(nav().pos());
+		pose = nav();
+		// std::cout << dt << std::endl;
 	}
 	
 	virtual void onDraw(Graphics &g) override {
 		
 //		g.polygonMode(Graphics::LINE);
 		State s;
+//		light();
+		omni().uniforms(shader());
+	    omni().clearColor() = Color(0.4);
 		
-		if (mStateTaker.get(s) > 0) {
-			while (mStateTaker.get(s) > 0) {} // Pop all states in queue
+		shader().uniform("lighting", 0.5);
+	    shader().uniform("texture", 0.5);
 		
+		bool newState = false;
+		while (mStateTaker.get(s) > 0) { newState = true;} // Pop all states in queue
+		
+		if(newState) {
 			memcpy(mMeterValues.data.ptr, s.rmsTexture,
 			       SPATIAL_SAMPLING *SPATIAL_SAMPLING * 3 * sizeof(float));
 			mTexture.submit(mMeterValues, true);
 			
 			mTexture.filter(Texture::NEAREST);
 		}
+		
+		g.polygonMode(Graphics::FILL);
+		g.antialiasing(Graphics::NICEST);
+		g.depthTesting(true);
+		g.blending(true);
 		
 //			mTexture.filter(Texture::LINEAR);
 		if (params.mSphere) {
@@ -99,7 +125,11 @@ public:
 			g.popMatrix();
 		}
 	}
-
+	
+	virtual void start() {
+      mStateTaker.start();                        // non-blocking
+      OmniStereoGraphicsRenderer::start();  // blocks
+    }
 	
 //	virtual void onKeyDown(const Keyboard& k) override {
 //		if (k.key() == 'g') {
@@ -120,6 +150,7 @@ private:
 	Array mMeterValues;
 	SingleRWRingBuffer mTextureBuffer;
 	
+	Light light;
 	
 	cuttlebone::Taker<State> mStateTaker;
 	
@@ -129,6 +160,6 @@ private:
 
 int main(int argc, char *argv[])
 {
-	AmbiMeter app;
+	AmbiMeterRenderer app;
 	app.start();
 }

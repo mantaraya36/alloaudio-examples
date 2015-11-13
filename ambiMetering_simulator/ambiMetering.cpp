@@ -43,11 +43,11 @@ public:
 	double mDbRange;
 };
 
-class AmbiMeter : public App
+class AmbiMeterRenderer : public App
 {
 public:
 	
-	AmbiMeter() :
+	AmbiMeterRenderer() :
 	    mMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
 	    mNewRmsMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
 	    mNewPeakMeterValues(3, AlloFloat32Ty, SPATIAL_SAMPLING, SPATIAL_SAMPLING, SPATIAL_SAMPLING),
@@ -174,7 +174,7 @@ public:
 	}
 	
 	static void sampleSpace(float *buf, int numChannels, int numFrames, void *userData) {
-		AmbiMeter *obj = static_cast<AmbiMeter *>(userData);
+		AmbiMeterRenderer *obj = static_cast<AmbiMeterRenderer *>(userData);
 		
 		float sqrt2 = 1.0/sqrt(2.0);
 		float *w = buf;
@@ -303,6 +303,6 @@ private:
 
 int main(int argc, char *argv[])
 {
-	AmbiMeter app;
+	AmbiMeterRenderer app;
 	app.start();
 }
