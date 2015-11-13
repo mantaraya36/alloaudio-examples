@@ -89,8 +89,8 @@ public:
 		omni().uniforms(shader());
 	    omni().clearColor() = Color(0.4);
 		
-		shader().uniform("lighting", 0);
-	    shader().uniform("texture", 1);
+		shader().uniform("lighting", 0.1);
+	    shader().uniform("texture", 0.9);
 		
 		bool newState = false;
 		while (mStateTaker.get(s) > 0) { newState = true;} // Pop all states in queue
@@ -100,7 +100,7 @@ public:
 			       SPATIAL_SAMPLING *SPATIAL_SAMPLING * 3 * sizeof(float));
 			mTexture.submit(mMeterValues, true);
 			
-			mTexture.filter(Texture::NEAREST);
+			mTexture.filter(Texture::LINEAR);
 			// std::cout << "New State" << std::endl;
 		}
 		
